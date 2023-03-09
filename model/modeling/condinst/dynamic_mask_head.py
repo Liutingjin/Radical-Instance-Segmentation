@@ -5,7 +5,7 @@ import copy
 import math
 
 from adet.utils.comm import compute_locations, aligned_bilinear
-from .edge_guided_module import build_edge_guided_module
+from .boundary_enhancement_module import build_boundary_enhancement_module
 # from adet.modeling.condinst.transformer import TwinTransformer
 
 def compute_project_term(mask_scores, gt_bitmasks):
@@ -135,7 +135,7 @@ class DynamicMaskHead(nn.Module):
         self.bias_nums = bias_nums
         self.num_gen_params = sum(weight_nums) + sum(bias_nums)
 
-        self.edge_guided_module = build_edge_guided_module()
+        self.boundary_enhancement_module = build_boundary_enhancement_module()
         # self.twintransformer = TwinTransformer(dim=8, depth=2, heads=4)
 
         # self.prediction = nn.Sequential(
@@ -223,7 +223,7 @@ class DynamicMaskHead(nn.Module):
 
         # mask_logits1 = mask_logits.detach()
         # mask_logits = self.prediction(mask_logits)
-        mask_logits = self.edge_guided_module(mask_logits, images_edge)
+        mask_logits = self.boundary_enhancement_module(mask_logits, images_edge)
 
         assert mask_feat_stride >= self.mask_out_stride
         assert mask_feat_stride % self.mask_out_stride == 0
