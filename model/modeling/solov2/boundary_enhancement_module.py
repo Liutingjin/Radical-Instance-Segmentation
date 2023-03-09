@@ -9,10 +9,10 @@ import pywt
 import numpy as np
 
 
-def build_edge_guided_module():
-    return EdgeGuidedModule()
+def build_boundary_enhancement_module():
+    return BoundaryEnhancementModule()
 
-class EdgeGuidedModule(nn.Module):
+class BoundaryEnhancementModule(nn.Module):
     def __init__(self,):
         super().__init__()
 
