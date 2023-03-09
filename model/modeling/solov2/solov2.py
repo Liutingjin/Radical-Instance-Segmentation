@@ -21,7 +21,7 @@ from fvcore.nn import sigmoid_focal_loss_jit
 
 from .utils import imrescale, center_of_mass, point_nms, mask_nms, matrix_nms
 from .loss import dice_loss, FocalLoss
-from .edge_guided_module import build_edge_guided_module
+from .boundary_enhancement_module import build_boundary_enhancement_module
 __all__ = ["SOLOv2"]
 
 
@@ -81,7 +81,7 @@ class SOLOv2(nn.Module):
         mask_shapes = [backbone_shape[f] for f in self.mask_in_features]
         self.mask_head = SOLOv2MaskHead(cfg, mask_shapes)
 
-        self.edge_guided_module = build_edge_guided_module()
+        self.boundary_enhancement_module = build_boundary_enhancement_module()
 
         # loss
         self.ins_loss_weight = cfg.MODEL.SOLOV2.LOSS.DICE_WEIGHT
@@ -304,7 +304,7 @@ class SOLOv2(nn.Module):
             cur_ins_pred = F.conv2d(cur_ins_pred, kernel_pred, stride=1).view(-1, H, W)
             ins_pred_list.append(cur_ins_pred)
 
-        mask_logits = self.edge_guided_module(ins_pred_list, images_edge)
+        mask_logits = self.boundary_enhancement_module(ins_pred_list, images_edge)
 
         """
         # generate masks
@@ -484,7 +484,7 @@ class SOLOv2(nn.Module):
 
         #添加边界增强
         seg_preds = F.conv2d(seg_preds, kernel_preds, stride=1).squeeze(0)
-        seg_preds = self.edge_guided_module([seg_preds], images_edge)[0].sigmoid()
+        seg_preds = self.boundary_enhancement_module([seg_preds], images_edge)[0].sigmoid()
 
         # mask.
         seg_masks = seg_preds > self.mask_threshold
