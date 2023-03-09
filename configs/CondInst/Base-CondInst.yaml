@@ -1,0 +1,26 @@
+MODEL:
+  META_ARCHITECTURE: "CondInst"
+  MASK_ON: True
+  BACKBONE:
+    NAME: "build_fcos_resnet_fpn_backbone"     #build_fcos_resnet_fpn_backbone
+  RESNETS:
+    OUT_FEATURES: ["res3", "res4", "res5"]
+  FPN:
+    IN_FEATURES: ["res3", "res4", "res5"]
+  PROPOSAL_GENERATOR:
+    NAME: "FCOS"
+  FCOS:
+    THRESH_WITH_CTR: True
+    USE_SCALE: True
+  CONDINST:
+    MAX_PROPOSALS: 500
+DATASETS:
+  TRAIN: ("coco_VOC_train",)           #coco_radical_train         coco_2017_train       coco_VOC_train
+  TEST: ("coco_VOC_val",)                 #coco_radical_val           coco_2017_val      coco_VOC_val
+SOLVER:
+  IMS_PER_BATCH: 2                    #16
+  BASE_LR: 0.01                       #0.01
+  STEPS: (60000, 80000)               #                            (60000, 80000)
+  MAX_ITER: 90000                     #                            90000
+INPUT:
+  MIN_SIZE_TRAIN: (640, 672, 704, 736, 768, 800)
