@@ -6,7 +6,7 @@
 基于[Detectron2](https://github.com/facebookresearch/detectron2)开源工具箱。
 
 ## 数据集：
-文字部件实例分割数据集
+[**文字部件实例分割数据集**](https://github.com/Liutingjin/Radical-Instance-Segmentation/releases/download/datasets/radical2coco.zip)
 
 ## run：
 `python train_net.py \
